@@ -42,3 +42,6 @@ ehthumbs.db
 Thumbs.db
 
 env.sh
+
+dynamicimages/*
+
