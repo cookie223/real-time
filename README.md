@@ -79,6 +79,8 @@ https://www.lfd.uci.edu/~gohlke/pythonlibs/#pillow
 1. To test out led matrix, follow the tutorial here: https://learn.adafruit.com/connecting-a-16x32-rgb-led-matrix-panel-to-a-raspberry-pi/testing
 
 ## Added Features
+![64x16 Display](media/64x16display.jpg?raw=true "64x16 Display")
+
 1. Depending on the subway line you want to retrieve data for, it could be in a separate feed. Added ability to set feeds to pull from in `config.py`. See here for list of MTA feeds:
  http://datamine.mta.info/list-of-feeds
  
