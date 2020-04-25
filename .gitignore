@@ -40,3 +40,5 @@ config.py
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+env.sh

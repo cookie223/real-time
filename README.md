@@ -65,6 +65,30 @@ In addition to a fresh install of [Raspbian](https://www.raspbian.org/), you wil
 
 6. Navigate back to the "subwaydisplay" directory in the command prompt and run the "importdata.py" program with `python importdata.py`. You should see the RGB LED matrix panels come to life with the information for the uptown and downtown Wall Street 2/3 trains, and downtown 4/5 trains. You can adjust which trains are displayed by altering the config file with the appropriate station ids which can be found in the "StaticData" folder. 
 
+## Notes on Installation
+
+1. Trouble installing PIL so I had to get whl file for pillow
+https://www.lfd.uci.edu/~gohlke/pythonlibs/#pillow
+
+1. Then needed to `pip install --upgrade pip`
+
+1. Then `pip install --ignore-installed <whl file>`
+
+1. For gtfs, `pip install --upgrade gtfs-realtime-bindings`
+
+1. To test out led matrix, follow the tutorial here: https://learn.adafruit.com/connecting-a-16x32-rgb-led-matrix-panel-to-a-raspberry-pi/testing
+
+## Added Features
+1. Depending on the subway line you want to retrieve data for, it could be in a separate feed. Added ability to set feeds to pull from in `config.py`. See here for list of MTA feeds:
+ http://datamine.mta.info/list-of-feeds
+ 
+1. Changed display to only show one train arrival at a time.
+
+TODO:
+1. Cycle through and display next N number of trains based on configuration
+2. Add ability to set either smaller 64x16 display or larger 192x16 display that also displays the destination stop 
+
+
 
 
 ## Contributing
