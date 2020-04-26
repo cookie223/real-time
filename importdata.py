@@ -24,6 +24,7 @@ with open('./StaticData/stops.txt') as file:
 #print stop_name_lkp
 
 while True:
+    output_list = []
     for f in FEEDS:
         #sleep(5)
         try:
@@ -67,38 +68,46 @@ while True:
                 times.sort()
                 print "Times: "
                 print dest_stop
-                times = [i for i in times if i>=0]
+                times = [(route,i) for i in times if i>=0]
+                times = times[0:NUM_TRAINS]
                 print times
                 
-                # For big sign
-                #out = stop_name_lkp[dest_stop[(route,times[0])]]+'  '+str(times[0])+' min'
-                #out = out.rjust(36).replace(' - ','-').replace('Island','Isl')
-                #staticimg = Image.open('staticimages/' + route + '.ppm')
+                # populate times by route into dict
+                output_list = output_list + times
                 
-                # For small sign
-                out = str(times[0])+' min'
-                out = out.rjust(9)
-                staticimg = Image.open('staticimages/' + route + '_small.ppm')
-                
-                print out
-                print route
-                draw = ImageDraw.Draw(staticimg)
-                font = ImageFont.truetype('DroidSans.ttf', 12)
-                draw.text((16, 1),out,(200,200,200),font=font)
-                staticimg.save('dynamicimages/dynamictime.ppm')
-                times = []
-                out = ''
-                print "led-matrix"
-                #os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
-                os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
         except Exception:
             print traceback.format_exc()
             
-
-
-
-    
-
-
-
-
+        times = []
+        
+    # Sort the list by time
+    output_list.sort(key=lambda tup: tup[1])
+        
+    print "OUTPUT LIST:"
+    print output_list
+        
+    for num,i in enumerate(output_list):
+                
+        # For big sign
+        #out = stop_name_lkp[dest_stop[(route,times[0])]]+'  '+str(times[0])+' min'
+        #out = out.rjust(36).replace(' - ','-').replace('Island','Isl')
+        #staticimg = Image.open('staticimages/' + route + '.ppm')
+                
+        # For small sign
+        out = str(i[1])+' min'
+        out = out.rjust(9)
+        staticimg = Image.open('staticimages/' + i[0] + '_small.ppm')
+                
+        print out
+        print i[0]
+        draw = ImageDraw.Draw(staticimg)
+        font = ImageFont.truetype('DroidSans.ttf', 12)
+        draw.text((16, 1),out,(200,200,200),font=font)
+        staticimg.save('dynamicimages/dynamictime.ppm')
+        out = ''
+        print "led-matrix"
+        #os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+        os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+        # Add a delay to make frequency consisten
+        if num < len(output_list)-1:
+            sleep(2)
