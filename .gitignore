@@ -1,6 +1,5 @@
 # Config file #
 ###############
-config.py
 *.pyc
 
 # Compiled source #

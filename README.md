@@ -84,16 +84,15 @@ https://www.lfd.uci.edu/~gohlke/pythonlibs/#pillow
 1. Depending on the subway line you want to retrieve data for, it could be in a separate feed. Added ability to set feeds to pull from in `config.py`. See here for list of MTA feeds:
  http://datamine.mta.info/list-of-feeds
  
-1. Changed display to only show one train arrival at a time.
+1. Changed display to only show one train arrival individually at a time.
+
+1. Cycle through and display next N number of trains based on `NUM_TRAINS` in `config.py`
+
+1. Added ability to set either smaller 64x16 display or larger 192x16 display that also displays the destination stop. Just set `LARGE_DISPLAY = True` in `config.py` 
 
 1. Set MTA key in env.sh (stored locally, not in repo) and source it `source env.sh`
 
 1. Run `./run.sh` to automatically source env.sh and run `python importdata.py` together
-
-TODO:
-1. Cycle through and display next N number of trains based on configuration
-2. Add ability to set either smaller 64x16 display or larger 192x16 display that also displays the destination stop 
-
 
 
 
