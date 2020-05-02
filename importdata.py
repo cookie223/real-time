@@ -93,13 +93,15 @@ while True:
         # For big sign
         if LARGE_DISPLAY:
             out = stop_name_lkp[dest_stop[i]]+'  '+str(i[1])+' min'
-            out = out.rjust(34).replace(' - ','-').replace('Island','Isl')
+            out = out.replace(' - ','-') #.replace('Island','Isl')
+            out = ' '*(34 - len(out))+out
+            print len(out)
             staticimg = Image.open('staticimages/' + i[0] + '.ppm')
         
         else:        
             # For small sign
             out = str(i[1])+' min'
-            out = out.rjust(9)
+            out = ' '*(10 - len(out)) + out
             staticimg = Image.open('staticimages/' + i[0] + '_small.ppm')
                 
         print out
@@ -112,9 +114,9 @@ while True:
         print "led-matrix"
         #os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
         if LARGE_DISPLAY:
-            os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+            os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=6 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
         else:
-            os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=3 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+            os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
         
         # Add a delay to make frequency consisten
         if num < len(output_list)-1:
