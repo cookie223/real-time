@@ -12,7 +12,6 @@ import csv
 
 times = []
 out = ''
-dest_stop = {}
 
 # read stop data
 stop_name_lkp = {}
@@ -27,12 +26,13 @@ http = urllib3.PoolManager()
 
 while True:
     output_list = []
+    dest_stop = {}
     for f in FEEDS:
         #sleep(5)
         try:
             mtafeed = gtfs_realtime_pb2.FeedMessage()
             headers={ "x-api-key": MTA_KEY}
-            url = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-'+f
+            url = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs'+f
             response = http.request('GET',url,headers=headers)
             
             mtafeed.ParseFromString(response.data)
@@ -70,15 +70,6 @@ while True:
                                     found = True
                                 if found:
                                     dest_stop.update({(route,time): update.stop_id})
-                times.sort()
-                print "Times: "
-                print dest_stop
-                times = [(route,i) for i in times if i>=0]
-                times = times[0:NUM_TRAINS]
-                print times
-                
-                # populate times by route into dict
-                output_list = output_list + times
                 
         except Exception:
             print traceback.format_exc()
@@ -86,8 +77,10 @@ while True:
         times = []
         
     # Sort the list by time
+    output_list = list(dest_stop.keys())
     output_list.sort(key=lambda tup: tup[1])
-        
+    output_list = output_list[0:NUM_TRAINS]
+
     print "OUTPUT LIST:"
     print output_list
         
@@ -99,7 +92,7 @@ while True:
         if LARGE_DISPLAY:
             out = stop_name_lkp[dest_stop[i]]+'  '+str(i[1])+' min'
             out = out.replace(' - ','-') #.replace('Island','Isl')
-            out = ' '*(43 - len(out))+out
+            out = ' '*(34 - len(out))+out
             print len(out)
             staticimg = Image.open('staticimages/' + i[0] + '.ppm')
         
