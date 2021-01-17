@@ -1,7 +1,7 @@
 from PIL import Image, ImageFont, ImageDraw
 from google.transit import gtfs_realtime_pb2
 import nyct_subway_pb2
-import urllib
+import urllib3
 import datetime
 from time import sleep
 import math
@@ -23,14 +23,19 @@ with open('./StaticData/stops.txt') as file:
 
 #print stop_name_lkp
 
+http = urllib3.PoolManager()
+
 while True:
     output_list = []
     for f in FEEDS:
         #sleep(5)
         try:
             mtafeed = gtfs_realtime_pb2.FeedMessage()
-            response = urllib.urlopen('http://datamine.mta.info/mta_esi.php?key=' + MTA_KEY + '&feed_id='+str(f))
-            mtafeed.ParseFromString(response.read())
+            headers={ "x-api-key": MTA_KEY}
+            url = 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs-'+f
+            response = http.request('GET',url,headers=headers)
+            
+            mtafeed.ParseFromString(response.data)
             current_time = datetime.datetime.now()
             #print mtafeed.entity
             times = []
@@ -94,7 +99,7 @@ while True:
         if LARGE_DISPLAY:
             out = stop_name_lkp[dest_stop[i]]+'  '+str(i[1])+' min'
             out = out.replace(' - ','-') #.replace('Island','Isl')
-            out = ' '*(34 - len(out))+out
+            out = ' '*(43 - len(out))+out
             print len(out)
             staticimg = Image.open('staticimages/' + i[0] + '.ppm')
         
