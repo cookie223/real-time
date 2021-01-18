@@ -91,7 +91,8 @@ while True:
         # For big sign
         if LARGE_DISPLAY:
             out = stop_name_lkp[dest_stop[i]]+'  '+str(i[1])+' min'
-            out = out.replace(' - ','-') #.replace('Island','Isl')
+            out = out.replace(' - ','-') 
+            out = out.replace('College','').replace('Bedford Park Blvd','Bedford Pk')
             out = ' '*(34 - len(out))+out
             print len(out)
             staticimg = Image.open('staticimages/' + i[0] + '.ppm')
