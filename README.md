@@ -58,9 +58,9 @@ In addition to a fresh install of [Raspbian](https://www.raspbian.org/), you wil
 
 4. With the matrices correctly wired to the Pi and connected to power, boot the Pi back on. Login using your new credentials, and navigate to the GUI via `startx`. Make sure you are connected to the internet, and open up the command prompt. Create a directory named "subwaydisplay" via `mkdir subwaydisplay` and navigate to the directory via `cd subwaydisplay`. Clone this repository into the folder via `git clone https://github.com/chris-griffin/real-time.git`. If you run into an error, make sure that you have git installed via `sudo apt-get install git`. Navigate to the "rpi-rgb-led-matrix" directory via `cd rpi-rgb-led-matrix` and clone @hzeller's [RGB LED library](https://github.com/hzeller/rpi-rgb-led-matrix) via `git clone https://github.com/hzeller/rpi-rgb-led-matrix.git`. Run the `make` command to compile the files of this repository. 
 
-5. Install [PIL](http://www.pythonware.com/products/pil/) and [python gtfs-realtime-bindings](https://developers.google.com/transit/gtfs-realtime/code-samples?hl=en#python) via instructions from the provided links. 
+5. This project still uses python2 as the time of writing. Install python2.7 if you need to and install PIL and python gtfs-realtime-binding via `python2.7 -m pip isntall pillow gtfs-realtime-bindings`.
 
-6. Obtain a developer key from the [MTA](http://web.mta.info/developers/developer-data-terms.html) and update the "sampleconfig.py" file with this information. Rename this file to "config.py".
+6. Obtain a developer key from the [MTA](http://web.mta.info/developers/developer-data-terms.html) and set it as an environment variable `mta_key`, you can also update it in `config.py`.
 
 
 6. Navigate back to the "subwaydisplay" directory in the command prompt and run the "importdata.py" program with `python importdata.py`. You should see the RGB LED matrix panels come to life with the information for the uptown and downtown Wall Street 2/3 trains, and downtown 4/5 trains. You can adjust which trains are displayed by altering the config file with the appropriate station ids which can be found in the "StaticData" folder. 

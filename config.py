@@ -2,20 +2,17 @@
 import os
 
 MTA_KEY = os.environ['mta_key'] #obtain one at http://web.mta.info/developers/developer-data-terms.html
-NUM_TRAINS = 4  #the number of trains in total regardless of line. i.e. 4 indicates will display 4 closest trains
-PATH_TO_display16x32 = '/home/pi/project'
+NUM_TRAINS = 2  #the number of trains in total regardless of line. i.e. 4 indicates will display 4 closest trains
 
-#Large is 192 x 16 and includes destination station, Small is 64 x 16
-LARGE_DISPLAY = False
+LED_ROW = 32
+LED_COL = 64
 
-# E/F Manhattan bound, Forest Hills station
-#STOP_IDS = ['G08S']
-#FEEDS = ["-bdfm","-ace"]
-#ROUTE_IDS = ['E','F']
-
-# 4/5 Bronx bound, Grand Central station
-STOP_IDS=['631N']
-FEEDS=['']
-ROUTE_IDS=['4','5']
+# 629: 459 59-Lex
+# R11: NRW 59-Lex
+# F11: EM 53-Lex
+# B08: FQ 63-Lex
+STOP_IDS=['629N', '629S', 'R11N', 'R11S', 'F11N', 'F11S', 'B08N', 'B08S'] # https://map.mta.info/ network requests shows stop_id
+FEEDS=['', "-nqrw", "-ace", "-bdfm"] # https://api.mta.info/#/subwayRealTimeFeeds
+ROUTE_IDS=['4','5', '6', 'N', 'Q', 'R', 'W', 'M', 'E', 'F']
 
 

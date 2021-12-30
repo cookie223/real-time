@@ -9,6 +9,7 @@ import os
 from config import *
 import traceback
 import csv
+import subprocess
 
 times = []
 out = ''
@@ -41,7 +42,7 @@ while True:
             times = []
             r = ''
             for stop in STOP_IDS:
-                print "Stop: "+stop
+                #print "Stop: "+stop
                 #print mtafeed.entity
                 for entity in mtafeed.entity:
                     #print "Here1"
@@ -51,7 +52,7 @@ while True:
                         r = entity.trip_update.trip.route_id
                         if r in ROUTE_IDS:
                             #print entity.trip_update
-                            print 'Route: '+r
+                            #print 'Route: '+r
                             route=r
                             time=0
                             found = False
@@ -67,7 +68,7 @@ while True:
                                     time = datetime.datetime.fromtimestamp(time)
                                     time = math.trunc(((time - current_time).total_seconds()) / 60)
                                     times.append(time)
-                                    found = True
+                                    found = time > 5  # I'm not going to make it to the station in 5m
                                 if found:
                                     dest_stop.update({(route,time): update.stop_id})
                 
@@ -80,43 +81,29 @@ while True:
     output_list = list(dest_stop.keys())
     output_list.sort(key=lambda tup: tup[1])
     output_list = output_list[0:NUM_TRAINS]
+    row_hight = (int) (LED_ROW / NUM_TRAINS)
+    row_width = (LED_ROW / NUM_TRAINS) * (64 / 16)  # static images are 64x16
 
-    print "OUTPUT LIST:"
-    print output_list
-        
     for num,i in enumerate(output_list):
-        print num
-        print i
                 
-        # For big sign
-        if LARGE_DISPLAY:
-            out = stop_name_lkp[dest_stop[i]]+'  '+str(i[1])+' min'
-            out = out.replace(' - ','-') 
-            out = out.replace('College','').replace('Bedford Park Blvd','Bedford Pk')
-            out = ' '*(34 - len(out))+out
-            print len(out)
-            staticimg = Image.open('staticimages/' + i[0] + '.ppm')
-        
-        else:        
-            # For small sign
-            out = str(i[1])+' min'
-            out = ' '*(10 - len(out)) + out
-            staticimg = Image.open('staticimages/' + i[0] + '_small.ppm')
-                
-        print out
-        print i[0]
+        out = str(i[1])+' min'
+        out = ' '*(LED_COL - row_hight - len(out)) + out
+        staticimg = Image.open('staticimages/' + i[0] + '.ppm')
+        staticimg.resize((row_hight, row_hight))
+    
         draw = ImageDraw.Draw(staticimg)
         font = ImageFont.truetype('DroidSans.ttf', 12)
-        draw.text((16, 1),out,(200,200,200),font=font)
+        draw.text((row_hight, 1),out,(200,200,200),font=font)
         staticimg.save('dynamicimages/dynamictime.ppm')
         out = ''
-        print "led-matrix"
-        #os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
-        if LARGE_DISPLAY:
-            os.system('sudo ./rpi-rgb-led-matrix/examples-api-use/demo --led-gpio-mapping=adafruit-hat --led-no-hardware-pulse --led-rows=32 --led-chain=2 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
-        else:
-            os.system('sudo ./rpi-rgb-led-matrix/examples-api-use/demo --led-gpio-mapping=adafruit-hat --led-no-hardware-pulse --led-rows=32 --led-chain=2 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
-        
+        # print "led-matrix"
+        # original line for reference os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+        process = subprocess.Popen('sudo ./rpi-rgb-led-matrix/examples-api-use/demo --led-gpio-mapping=adafruit-hat --led-brightness=50 --led-no-hardware-pulse --led-rows=' + str(LED_ROW) + ' --led-chain=' + str((int)(LED_COL/32)) + ' -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+        # -t no longer exists, kill with process.kill()
+        sleep(5)
+        process.kill()
+
+
         # Add a delay to make frequency consisten
         if num < len(output_list)-1:
             sleep(2)
