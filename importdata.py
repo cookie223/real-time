@@ -97,8 +97,8 @@ while True:
         staticimg.save('dynamicimages/dynamictime.ppm')
         out = ''
         # print "led-matrix"
-        # original line for reference os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
-        process = subprocess.Popen('sudo ./rpi-rgb-led-matrix/examples-api-use/demo --led-gpio-mapping=adafruit-hat --led-brightness=50 --led-no-hardware-pulse --led-rows=' + str(LED_ROW) + ' --led-chain=' + str((int)(LED_COL/32)) + ' -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+	# original line for reference os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+        process = subprocess.Popen(['sudo','./rpi-rgb-led-matrix/examples-api-use/demo','--led-gpio-mapping=adafruit-hat','--led-brightness=50','--led-no-hardware-pulse','--led-rows='+str(LED_ROW),'--led-chain='+str((int)(LED_COL/32)),'-D','1','-m','5000','dynamicimages/dynamictime.ppm'])
         # -t no longer exists, kill with process.kill()
         sleep(5)
         process.kill()
