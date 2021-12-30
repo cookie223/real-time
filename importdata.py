@@ -81,29 +81,32 @@ while True:
     output_list = list(dest_stop.keys())
     output_list.sort(key=lambda tup: tup[1])
     output_list = output_list[0:NUM_TRAINS]
-    row_hight = (int) (LED_ROW / NUM_TRAINS)
+    row_height = (int) (LED_ROW / NUM_TRAINS)
     row_width = (LED_ROW / NUM_TRAINS) * (64 / 16)  # static images are 64x16
+    print("row_height " + row_height + " row_width " + row_width)
 
-    for num,i in enumerate(output_list):
-                
+    processes = []
+    whole_image = Image.new("RGB", (LED_ROW, LED_COL))
+    for num,i in enumerate(output_list):      
         out = str(i[1])+' min'
-        out = ' '*(LED_COL - row_hight - len(out)) + out
+        out = ' '*(LED_COL - row_height - len(out)) + out
         staticimg = Image.open('staticimages/' + i[0] + '.ppm')
-        staticimg.resize((row_hight, row_hight))
+        staticimg.resize((row_hight, row_height))
     
         draw = ImageDraw.Draw(staticimg)
         font = ImageFont.truetype('DroidSans.ttf', 12)
-        draw.text((row_hight, 1),out,(200,200,200),font=font)
-        staticimg.save('dynamicimages/dynamictime.ppm')
+        draw.text((row_height, 1),out,(200,200,200),font=font)
+        whole_image.paste(staticimg, (0, i * row_height))
         out = ''
         # print "led-matrix"
-	# original line for reference os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
-        process = subprocess.Popen(['sudo','./rpi-rgb-led-matrix/examples-api-use/demo','--led-gpio-mapping=adafruit-hat','--led-brightness=50','--led-no-hardware-pulse','--led-rows='+str(LED_ROW),'--led-chain='+str((int)(LED_COL/32)),'-D','1','-m','5000','dynamicimages/dynamictime.ppm'])
-        # -t no longer exists, kill with process.kill()
-        sleep(5)
-        process.kill()
-
-
-        # Add a delay to make frequency consisten
         if num < len(output_list)-1:
             sleep(2)
+    whole_image.save('dynamicimages/dynamictime.ppm')
+	# original line for reference os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+    process = subprocess.Popen(['sudo','./rpi-rgb-led-matrix/examples-api-use/demo','--led-gpio-mapping=adafruit-hat','--led-brightness=50','--led-no-hardware-pulse','--led-rows='+str(LED_ROW),'--led-chain='+str((int)(LED_COL/32)),'-D','1','-m','5000','dynamicimages/dynamictime.ppm'])
+    # -t no longer exists, kill with process.kill
+    processes.append(process)
+    process.kill()
+
+        
+
