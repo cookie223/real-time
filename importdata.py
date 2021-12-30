@@ -113,9 +113,9 @@ while True:
         print "led-matrix"
         #os.system('sudo ./rpi-rgb-led-matrix2/rpi-rgb-led-matrix/led-matrix -r 16 -c 2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
         if LARGE_DISPLAY:
-            os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=6 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+            os.system('sudo ./rpi-rgb-led-matrix/examples-api-use/demo --led-gpio-mapping=adafruit-hat --led-no-hardware-pulse --led-rows=32 --led-chain=2 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
         else:
-            os.system('sudo '+PATH_TO_display16x32+'/display16x32/rpi-rgb-led-matrix/examples-api-use/demo --led-no-hardware-pulse --led-rows=16 --led-chain=2 -t 5 -b 50 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
+            os.system('sudo ./rpi-rgb-led-matrix/examples-api-use/demo --led-gpio-mapping=adafruit-hat --led-no-hardware-pulse --led-rows=32 --led-chain=2 -D 1 -m 5000 dynamicimages/dynamictime.ppm')
         
         # Add a delay to make frequency consisten
         if num < len(output_list)-1:

@@ -6,7 +6,7 @@ NUM_TRAINS = 4  #the number of trains in total regardless of line. i.e. 4 indica
 PATH_TO_display16x32 = '/home/pi/project'
 
 #Large is 192 x 16 and includes destination station, Small is 64 x 16
-LARGE_DISPLAY = True
+LARGE_DISPLAY = False
 
 # E/F Manhattan bound, Forest Hills station
 #STOP_IDS = ['G08S']
